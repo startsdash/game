@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { Director, GameScenario, GameResult } from "../types";
 
@@ -177,10 +178,8 @@ export const resolveRound = async (scenarioContext: string, userAction: string, 
         Again: DO NOT INCLUDE ANY TEXT OR TYPOGRAPHY IN THE IMAGE.
       `;
 
-      // *** ИСПРАВЛЕННЫЙ ВЫЗОВ: ai.models.generateImages -> ai.images.generate ***
-      const imageResponse = await ai.images.generate({
-        // ИСПРАВЛЕННАЯ МОДЕЛЬ: 'imagen-4.0-generate-001' -> 'imagen-3.0-generate-002'
-        model: 'imagen-3.0-generate-002', 
+      const imageResponse = await ai.models.generateImages({
+        model: 'imagen-4.0-generate-001',
         prompt: imagePrompt,
         config: {
           numberOfImages: 1,
@@ -194,8 +193,7 @@ export const resolveRound = async (scenarioContext: string, userAction: string, 
         imageUrl = `data:image/jpeg;base64,${base64ImageBytes}`;
       }
     } catch (imgError) {
-      // Это консоль, которую мы искали. Теперь она, вероятно, не покажется.
-      console.error("Image generation failed, proceeding with text only:", imgError); 
+      console.error("Image generation failed, proceeding with text only:", imgError);
       // We don't throw here, just return result without image
     }
 
