@@ -177,10 +177,9 @@ export const resolveRound = async (scenarioContext: string, userAction: string, 
         Again: DO NOT INCLUDE ANY TEXT OR TYPOGRAPHY IN THE IMAGE.
       `;
 
-      // *** ИСПРАВЛЕННЫЙ ВЫЗОВ ДЛЯ ГЕНЕРАЦИИ ИЗОБРАЖЕНИЙ ***
-      // Заменено ai.models.generateImages на актуальный ai.images.generate
+      // *** ИСПРАВЛЕННЫЙ ВЫЗОВ: ai.models.generateImages -> ai.images.generate ***
       const imageResponse = await ai.images.generate({
-        // Заменена модель 'imagen-4.0-generate-001' на рекомендуемую 'imagen-3.0-generate-002'
+        // ИСПРАВЛЕННАЯ МОДЕЛЬ: 'imagen-4.0-generate-001' -> 'imagen-3.0-generate-002'
         model: 'imagen-3.0-generate-002', 
         prompt: imagePrompt,
         config: {
@@ -189,15 +188,14 @@ export const resolveRound = async (scenarioContext: string, userAction: string, 
           outputMimeType: 'image/jpeg'
         }
       });
-      // *************************************************
 
-      // Остальной код извлечения данных остался правильным
       const base64ImageBytes = imageResponse.generatedImages?.[0]?.image?.imageBytes;
       if (base64ImageBytes) {
         imageUrl = `data:image/jpeg;base64,${base64ImageBytes}`;
       }
     } catch (imgError) {
-      console.error("Image generation failed, proceeding with text only:", imgError);
+      // Это консоль, которую мы искали. Теперь она, вероятно, не покажется.
+      console.error("Image generation failed, proceeding with text only:", imgError); 
       // We don't throw here, just return result without image
     }
 
