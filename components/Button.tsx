@@ -1,4 +1,6 @@
+
 import React from 'react';
+import { playClickSound } from '../services/soundService';
 
 interface ButtonProps {
   onClick: () => void;
@@ -8,9 +10,17 @@ interface ButtonProps {
 }
 
 export const Button: React.FC<ButtonProps> = ({ onClick, disabled, label, className = '' }) => {
+  
+  const handleClick = () => {
+    if (!disabled) {
+      playClickSound();
+      onClick();
+    }
+  };
+
   return (
     <button
-      onClick={onClick}
+      onClick={handleClick}
       disabled={disabled}
       className={`
         relative group font-anton tracking-wider uppercase text-2xl md:text-4xl px-8 py-4 

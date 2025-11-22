@@ -1,6 +1,7 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GameResult } from '../types';
+import { playDramaticBoom, playClickSound } from '../services/soundService';
 
 interface ResultCardProps {
   data: GameResult;
@@ -10,8 +11,13 @@ interface ResultCardProps {
 export const ResultCard: React.FC<ResultCardProps> = ({ data, onLike }) => {
   const [isLiked, setIsLiked] = useState(false);
 
+  useEffect(() => {
+    playDramaticBoom();
+  }, []);
+
   const handleLikeClick = () => {
     if (!isLiked && onLike) {
+      playClickSound();
       setIsLiked(true);
       onLike();
     }

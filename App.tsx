@@ -2,6 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import { GameScenario, GameResult, ScenarioOption } from './types';
 import { createScenario, resolveRound } from './services/geminiService';
+import { initAudio, playProjectorSound, playPaperSound } from './services/soundService'; // Import Sound Service
 import { Button } from './components/Button';
 import { ResultCard } from './components/ResultCard';
 import { ScenarioCard } from './components/ScenarioCard';
@@ -18,6 +19,9 @@ const App: React.FC = () => {
 
   // Step 1: Generate the Situation
   const handleStartGame = useCallback(async () => {
+    initAudio(); // Initialize Audio Context on first user gesture
+    playProjectorSound(); // Play mechanical sound
+
     setGameState('loading_scenario');
     setError(null);
     setScenario(null);
@@ -27,6 +31,7 @@ const App: React.FC = () => {
       const newScenario = await createScenario();
       setScenario(newScenario);
       setGameState('scenario_active');
+      playPaperSound(); // Play paper/shuffle sound when scenario appears
     } catch (err) {
       console.error(err);
       setError("Сценарист ушел в запой. Попробуйте снова.");
@@ -37,8 +42,10 @@ const App: React.FC = () => {
   // Step 2: User picks an option -> Generate Quote & Image
   const handleOptionSelect = useCallback(async (option: ScenarioOption) => {
     if (!scenario) return;
-
+    
+    // Sound handled in ScenarioCard component for immediate feedback
     setGameState('loading_result');
+    playProjectorSound();
     
     try {
       // Pass likedQuotes history to the AI
@@ -61,6 +68,7 @@ const App: React.FC = () => {
 
   // Reset
   const handleReset = () => {
+    playPaperSound();
     setGameState('idle');
     setScenario(null);
     setResult(null);

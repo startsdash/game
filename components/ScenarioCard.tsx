@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { GameScenario, ScenarioOption } from '../types';
+import { playClickSound } from '../services/soundService';
 
 interface ScenarioCardProps {
   scenario: GameScenario;
@@ -9,6 +10,12 @@ interface ScenarioCardProps {
 }
 
 export const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario, onOptionSelect, disabled }) => {
+  
+  const handleSelect = (option: ScenarioOption) => {
+    playClickSound();
+    onOptionSelect(option);
+  };
+
   return (
     <div className="w-full max-w-2xl mx-auto animate-[fadeIn_0.5s_ease-out]">
       
@@ -27,7 +34,7 @@ export const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario, onOptionSe
         {scenario.options.map((option, index) => (
           <button
             key={option.id}
-            onClick={() => onOptionSelect(option)}
+            onClick={() => handleSelect(option)}
             disabled={disabled}
             className={`
               group relative w-full text-left transition-all duration-200
