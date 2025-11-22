@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { Director, GameScenario, GameResult } from "../types";
 
@@ -178,8 +177,11 @@ export const resolveRound = async (scenarioContext: string, userAction: string, 
         Again: DO NOT INCLUDE ANY TEXT OR TYPOGRAPHY IN THE IMAGE.
       `;
 
-      const imageResponse = await ai.models.generateImages({
-        model: 'imagen-4.0-generate-001',
+      // *** ИСПРАВЛЕННЫЙ ВЫЗОВ ДЛЯ ГЕНЕРАЦИИ ИЗОБРАЖЕНИЙ ***
+      // Заменено ai.models.generateImages на актуальный ai.images.generate
+      const imageResponse = await ai.images.generate({
+        // Заменена модель 'imagen-4.0-generate-001' на рекомендуемую 'imagen-3.0-generate-002'
+        model: 'imagen-3.0-generate-002', 
         prompt: imagePrompt,
         config: {
           numberOfImages: 1,
@@ -187,7 +189,9 @@ export const resolveRound = async (scenarioContext: string, userAction: string, 
           outputMimeType: 'image/jpeg'
         }
       });
+      // *************************************************
 
+      // Остальной код извлечения данных остался правильным
       const base64ImageBytes = imageResponse.generatedImages?.[0]?.image?.imageBytes;
       if (base64ImageBytes) {
         imageUrl = `data:image/jpeg;base64,${base64ImageBytes}`;
